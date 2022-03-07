@@ -1,0 +1,321 @@
+---
+title: "ECO395 HW 2: Rajsitee Dhavale and Arpan Chatterji"
+output: github_document
+---
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+# Imported libraries
+library(tidyverse)
+library(rsample)
+library(caret)
+library(modelr)
+library(knitr)
+library(mosaic)
+library(parallel)
+library(foreach)
+library(purrr)
+library(readr)
+# install.packages("lattice")
+# install.packages("scales")
+```
+
+# Question 1: Capmetro_UT 
+## Load the data for capmetro_UT
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+capmetro_UT = read.csv("/Users/rajsitee/Desktop/Spring 2022/Data Mining/ECO395M/data/capmetro_UT.csv")
+# head(capmetro_UT)
+```
+
+
+# Recode the categorical variables in sensible, rather than alphabetical, order
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+capmetro_UT = mutate(capmetro_UT,
+                     day_of_week = factor(day_of_week,
+                                          levels=c("Mon", "Tue", "Wed","Thu", "Fri", "Sat", "Sun")),
+                     month = factor(month,
+                                    levels=c("Sep", "Oct","Nov")))
+
+# head(capmetro_UT) 
+
+```
+
+## Part A: Plot Average Boardings according to the Day of the Week
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+avgb = capmetro_UT %>%
+  group_by(hour_of_day, day_of_week, month) %>%
+  summarize(average_boarding = mean(boarding))
+```
+
+### Plot for Part A
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+ggplot(data= avgb, aes(x= hour_of_day, y= average_boarding, color= month, group = month)) +
+  geom_line(aes(x= hour_of_day, y= average_boarding, color= month, group = month)) + facet_wrap(~day_of_week, scales = 'free', ncol=2) +
+  scale_x_continuous(limits = c(6,21)) + scale_y_continuous(limits = c(0,160)) +
+  ggtitle("Average Boardings According to Day of the Week") + 
+  labs(x = "Hour", y = "Average Boardings", caption = "Overall, the average number of boardings is similar on weekdays and falls over the weekends for the three months studied. This is probably because people travel to and from the university over the weekdays (for classes) and do not have lectures over the weekend. The peak hour of boarding is approximately 3 to 5 pm in September, October & November as this is when a large number of classes end. 
+The average number of boardings on Mondays in September is low because of the Labor Day holiday (Monday- first week of September). 
+Lower boardings for Wednesday, Thursday and Friday can most likely be attributed to the Thanksgiving Break, when students do not have college.") +
+  theme(plot.title = element_text(hjust = 0, face = "bold")) +
+  theme(plot.caption = element_text(hjust = 0)) + 
+  guides(colour = guide_legend(title="Month"))
+
+```
+#### Caption (Just in Case): Overall, the average number of boardings is similar on weekdays and falls over the weekends for the three months studied. This is probably because people travel to and from the university over the weekdays (for classes) and do not have lectures over the weekend. The peak hour of boarding is approximately 3 to 5 pm in September, October & November as this is when a large number of classes end. 
+# The average number of boardings on Mondays in September is low because of the Labor Day holiday (Monday- first week of September). 
+# Lower boardings for Wednesday, Thursday and Friday can most likely be attributed to the Thanksgiving Break, when students do not have college.
+
+## Part B: No. of Boardings depending upon Temperature in Fahrenheit 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+abtemp = capmetro_UT %>%
+  group_by(day_of_week, hour_of_day, temperature)
+  # summarize(max_boarding = max(boarding))
+
+# view(abtemp)
+```
+
+### Plot for Part B
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+ggplot(abtemp, aes(x = temperature, y = boarding, colour = weekend, shape = weekend)) +
+  geom_point(size = 0.5) + facet_wrap(~hour_of_day, scale = 'free') +
+  scale_x_continuous(limits=c(0,98)) + scale_y_continuous(limits=c(0,290)) +
+  ggtitle("No. of Boardings Depending upon Temperature in Fahrenheit") +
+  labs(y= "Boardings", x= "Temperature in Fahrenheit", caption = "The total number of boardings is higher on weekdays and low over weekends as 
+college students students have classes on weekdays. This is true for all temperatures and time (except 6-9 am, as college 
+students tend to sleep in). As instructed, we hold the hour of the day and the day of the week constant. We observe that temperature 
+does not have a visibly significant effect on the umber of boardings. We can say this as the dots in the graphs are distributed quite evenly/consistently across different temperatures.") +
+  theme(plot.title = element_text(hjust=0, face = "bold")) +
+  theme(plot.caption = element_text(hjust=0)) +
+  scale_shape_discrete(labels=c("Weekdays", "Weekends")) +
+  scale_colour_discrete(labels=c("Weekdays", "Weekends")) + 
+  labs(shape = "Day of the Week", colour = "Day of the Week")
+```
+#### Caption (just in case): The total number of boardings is higher on weekdays and low over weekends as 
+# college students students have classes on weekdays. This is true for all temperatures and time (except 6-9 am, as college 
+# students tend to sleep in). As instructed, we hold the hour of the day and the day of the week constant. We observe that temperature 
+# does not have a visibly significant effect on the umber of boardings. We can say this as the dots in the graphs are distributed quite # evenly/consistently across different temperatures.
+
+
+# Question 2: Saratoga Houses 
+
+## Load the data for SaratogaHouses 
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+data(SaratogaHouses)
+# View(SaratogaHouses)
+```
+
+## Part A: The Linear Model
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+K_folds = 5
+
+saratoga_folds = crossv_kfold(SaratogaHouses, k=K_folds)
+#The Linear Model
+## Base Model 
+# saratogalm_base = lm(price ~ lotSize + age + livingArea + bedrooms + fireplaces + heating + bathrooms + rooms + fuel + centralAir, data = SaratogaHouses)
+## Built Model 
+saratogalm_built = map(saratoga_folds$train, ~ lm(price ~ lotSize + age + heating + fireplaces + fuel + bathrooms + bedrooms 
+                                                + rooms + fuel + centralAir + landValue + landValue*fuel + centralAir*heating + heating*bedrooms, data = .))
+errs = map2_dbl(saratogalm_built, saratoga_folds$test, modelr::rmse)
+
+
+
+```
+
+## Part B: The KNN Model 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+# Scale the model 
+saratoga_scaled = SaratogaHouses %>%
+  mutate(across(c(lotSize, age, landValue, livingArea, pctCollege, bedrooms, fireplaces, bathrooms, rooms), scale))
+saratoga_scaled_folds = crossv_kfold(saratoga_scaled, k=K_folds)
+
+k_grid = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 
+           30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 125, 150, 175, 200, 250, 300)
+cv_grid = foreach(k = k_grid, .combine='rbind') %dopar% {
+  models = map(saratoga_scaled_folds$train, ~ knnreg(price ~ lotSize + age + heating + fireplaces + bathrooms + bedrooms + rooms + fuel + centralAir + landValue, k=k, data = ., use.all=FALSE))
+  errs = map2_dbl(models, saratoga_scaled_folds$test, modelr::rmse)
+  c(k=k, err = mean(errs), std_err = sd(errs)/sqrt(K_folds))
+} %>% as.data.frame
+
+cv_grid_final = cv_grid %>% filter(err == min(cv_grid$err))
+rownames(cv_grid_final) = c("KNN Model")
+cv_grid_final = rbind(cv_grid_final, data.frame(k="NA", err = mean(errs), std_err = sd(errs)/sqrt(K_folds),  row.names = c("Linear Model"))) %>% dplyr::select(-std_err)
+colnames(cv_grid_final) = c("k", "rMSE")
+
+view(cv_grid_final)
+
+```
+### Summary 
+### On comparison of the two models, we see that the Linear Model has performed better than the KNN Model. This is because the linear model has a lower RMSE than that of the KNN model, which indicates a better fit of the model. The linear model also allows us to pick the features that we want to work with (to study their impact on the price) and we can create specific interactions as well. 
+
+
+# Question 3: German Credit 
+
+## Part A: Bar Plot
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+#Part A- bar plot
+library(readr)
+german_credit <- read_csv("/Users/rajsitee/Desktop/Spring 2022/Data Mining/ECO395M/data/german_credit.csv")
+```
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+credit_defaults = german_credit %>%
+  group_by(history) %>%
+  summarize(defaults = mean(Default))
+```
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+ ggplot(credit_defaults) + 
+  geom_bar(aes(x = history, y = defaults, fill = history), position = "dodge", stat = "identity") + 
+  labs(x = "Type of Credit Rating", y = "Default Likelihood", title = "Default Probability by Credit History") + 
+  scale_fill_manual(values = c("black", "red", "turquoise")) 
+  
+```
+
+## Part B: Logistic Regression 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+#Part b- logit regression
+logit_default = glm(Default~duration + amount + installment + age + history + purpose + foreign, data = german_credit, family = binomial)
+
+logit_default
+
+```
+
+### Summary: ## In this logistic regression model, the `historypoor` variable will decrease odds of default by 1.10, and having the `historyterrible` variable decreases odds of default by 1.885 per unit. Here, having poor or terrible credit actually decreases the probability of default, which is the opposite of the common rationale. Therefore, we think the dataset is not accurate for making a predictive model of defaults especially if the aim of the model is to find prospective borrowers to categorize them into "high" versus "low" probability of default. This is because of the way the data sampling has been done, where instead of random sampling, the bank picked the defaulted loans and looked for similar kinds of loans. This most likely created a big bias in the data collecting process. In the usual sense, it is likely that the credit history for defaulted loans is poor or terrible and it would not include enough datasets with good credit history. In fact, out of 1000 observations, less than 100 observations have a good credit history. Therefore, we would suggest the bank using a random sampling method even though it would not include a lot of defaulted loans. But, increasing the number of observations can definitely help.
+
+
+# Question 4: Hotels Valuation 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+library(readr)
+hotels_val <- read_csv("/Users/rajsitee/Desktop/Spring 2022/Data Mining/ECO395M/data/hotels_val.csv")
+
+hotels_dev <- read_csv("/Users/rajsitee/Desktop/Spring 2022/Data Mining/ECO395M/data/hotels_dev.csv")
+
+```
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+hotels_dev_folds = initial_split(hotels_dev, prob=0.8)
+hotels_dev_train = training(hotels_dev_folds)
+hotels_dev_test = testing(hotels_dev_folds)
+
+baseline1 = glm(children ~ market_segment + adults + customer_type + is_repeated_guest, data = hotels_dev_train, family = binomial)
+baseline1_prediction = predict(baseline1, hotels_dev_test, type ='response')
+
+baseline2 = glm(children ~ . - arrival_date, data = hotels_dev_train, family = binomial)
+baseline2_prediction = predict(baseline2, hotels_dev_test, type='response')
+
+hotels_lpm = lm(children ~ . -arrival_date - days_in_waiting_list - required_car_parking_spaces + average_daily_rate:total_of_special_requests + is_repeated_guest:total_of_special_requests + is_repeated_guest:average_daily_rate, data = hotels_dev_train)
+hotels_lpm_prediction = predict(hotels_lpm, hotels_dev_test)
+```
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+thresh_grid = seq(0.95, 0.05, by=-0.005)
+
+roc_curve_hotel = foreach(thresh = thresh_grid, .combine='rbind') %do% {
+  yhat_test_baseline1 = ifelse(baseline1_prediction >= thresh, 1, 0)
+  yhat_test_baseline2 = ifelse(baseline2_prediction >= thresh, 1, 0)
+  yhat_test_lpm = ifelse(hotels_lpm_prediction >= thresh, 1, 0)
+  confusion_out_baseline1 = table(y = hotels_dev_test$children, yhat = yhat_test_baseline1)
+  confusion_out_baseline2 = table(y = hotels_dev_test$children, yhat = yhat_test_baseline2)
+  confusion_out_lpm = table(y = hotels_dev_test$children, yhat = yhat_test_lpm)
+  
+   # FPR, TPR 
+  out_baseline1 = data.frame(model = "hotelbaseline1",
+                         TPR = ifelse(class(try(confusion_out_baseline1[2,"1"], silent=TRUE)) == "try-error", 0, confusion_out_baseline1[2,"1"]/sum(hotels_dev$children==1)),
+                         FPR = ifelse(class(try(confusion_out_baseline1[1,"1"], silent=TRUE)) == "try-error", 0, confusion_out_baseline1[1,"1"]/sum(hotels_dev$children==0)), 
+                         thresh = thresh)
+  out_baseline2 = data.frame(model = "hotelbaseline2",
+                         TPR = ifelse(class(try(confusion_out_baseline2[2,"1"], silent=TRUE)) == "try-error", 0, confusion_out_baseline2[2,"1"]/sum(hotels_dev$children==1)),
+                         FPR = ifelse(class(try(confusion_out_baseline2[1,"1"], silent=TRUE)) == "try-error", 0, confusion_out_baseline2[1,"1"]/sum(hotels_dev$children==0)), 
+                         thresh = thresh)
+  out_lpm = data.frame(model = "LPM",
+                         TPR = ifelse(class(try(confusion_out_lpm[2,"1"], silent=TRUE)) == "try-error", 0, confusion_out_lpm[2,"1"]/sum(hotels_dev$children==1)),
+                         FPR = ifelse(class(try(confusion_out_lpm[2,"1"], silent=TRUE)) == "try-error", 0, confusion_out_lpm[1,"1"]/sum(hotels_dev$children==0)), 
+                       thresh = thresh)
+  rbind(out_baseline1, out_baseline2, out_lpm)
+} %>% as.data.frame()
+ggplot(roc_curve_hotel) +
+  geom_line(aes(x=FPR, y=TPR, color=model))+
+  labs(title="ROC curves")
+```
+## The ROC curve is better for hotelbaseline 2 in the linear model than those of hotelbaseline 1.
+
+# Step 1 Model Validation 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+#Step 1 Model Validation
+phat_val_baseline2 = predict(baseline2, hotels_val, type='response')
+thresh_grid = seq(0.95, 0.05, by=-0.005)
+library(parallel)
+library(foreach)
+library(iterators)
+
+roc_curve_hotel_val = foreach(thresh = thresh_grid, .combine='rbind') %do% {
+  
+  yhat_val_baseline2 = ifelse(phat_val_baseline2 >= thresh, 1, 0)
+  
+  confusion_out_baseline2 = table(y = hotels_val$children, yhat = yhat_val_baseline2)
+  # FPR, TPR
+  out_baseline2 = data.frame(model = "2nd baseline",
+                         TPR = ifelse(class(try(confusion_out_baseline2[2,"1"], silent=TRUE)) == "try-error", 0, confusion_out_baseline2[2,"1"]/sum(hotels_val$children==1)),
+                         FPR = ifelse(class(try(confusion_out_baseline2[1,"1"], silent=TRUE)) == "try-error", 0, confusion_out_baseline2[1,"1"]/sum(hotels_val$children==0)))
+  rbind(out_baseline2)
+} %>% as.data.frame()
+ggplot(roc_curve_hotel_val) +
+  geom_line(aes(x=FPR, y=TPR, color = model)) +
+  labs(title="ROC Curve of 2nd baseline")
+
+```
+# Step 2 Model Validation 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+
+K_folds = 20
+library(caret)
+hotel_val_folds = createFolds(hotels_val$children, k=K_folds)
+hotel_results = lapply(hotel_val_folds, function(x){
+  test = hotels_val[x,]
+  pred = predict(baseline2, test, type='response')
+   return(pred)
+})
+hotel_actual = lapply(hotel_val_folds, function(x){
+    test = hotels_val[x,]
+    return(sum(test$children))
+})
+hotel_predicted = c()
+hotel_difference = c()
+for (k in seq(1, 20)){ 
+  hotel_predicted = append(hotel_predicted, as.integer(sum(unlist(hotel_results[k]))))
+  hotel_difference = append(hotel_difference, as.integer(unlist(hotel_actual[k])) - as.integer(hotel_predicted[k]))
+}
+hotel_final = cbind(hotel_predicted, hotel_actual, hotel_difference)
+hotel_final = rbind(hotel_final, hotel_final %>% apply(2, unlist) %>% apply(2, abs) %>% apply(2, sum))
+rownames(hotel_final)[21] = "total"
+hotel_final[21, 3] = as.integer(hotel_final[21, 1]) - as.integer(hotel_final[21, 2])
+colnames(hotel_final) = c("Predicted", "Actual", "Difference")
+knitr::kable(hotel_final)
+kable(hotel_final)
+```
+## The model only got 12 predictions wrong out of 4999 observations. So, if we look at every fold there is a difference but in total sums up to 12. Thus, we can say it's a very accurate model. (This number changes every time the function is run.)
