@@ -134,6 +134,28 @@ quite # evenly/consistently across different temperatures.
 
 ## Part B: The KNN Model
 
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">k</th>
+<th style="text-align: right;">rMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">KNN Model</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: right;">64829.44</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Linear Model</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">63996.67</td>
+</tr>
+</tbody>
+</table>
+
 ### Summary
 
 ### On comparison of the two models, we see that the Linear Model has performed better than the KNN Model. This is because the linear model has a lower RMSE than that of the KNN model, which indicates a better fit of the model. The linear model also allows us to pick the features that we want to work with (to study their impact on the price) and we can create specific interactions as well.
@@ -228,117 +250,117 @@ of hotelbaseline 1.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Fold01</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">16</td>
-<td style="text-align: left;">-3</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold02</td>
+<td style="text-align: left;">23</td>
+<td style="text-align: left;">27</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold03</td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">-2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold04</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">20</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold05</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold06</td>
 <td style="text-align: left;">20</td>
 <td style="text-align: left;">16</td>
 <td style="text-align: left;">-4</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Fold03</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">25</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Fold04</td>
-<td style="text-align: left;">23</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Fold05</td>
-<td style="text-align: left;">25</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Fold06</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">-2</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Fold07</td>
-<td style="text-align: left;">23</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-2</td>
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">-12</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold08</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-4</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold09</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-4</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">-3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold10</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: left;">25</td>
+<td style="text-align: left;">23</td>
+<td style="text-align: left;">-2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold11</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">-1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold12</td>
 <td style="text-align: left;">20</td>
-<td style="text-align: left;">28</td>
-<td style="text-align: left;">8</td>
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">-3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold13</td>
 <td style="text-align: left;">23</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">-3</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">-7</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold14</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-6</td>
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold15</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-2</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold16</td>
+<td style="text-align: left;">20</td>
 <td style="text-align: left;">23</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">-10</td>
+<td style="text-align: left;">3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold17</td>
-<td style="text-align: left;">15</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">-2</td>
+<td style="text-align: left;">26</td>
+<td style="text-align: left;">28</td>
+<td style="text-align: left;">2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold18</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">8</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">20</td>
+<td style="text-align: left;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold19</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-1</td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold20</td>
@@ -348,9 +370,9 @@ of hotelbaseline 1.
 </tr>
 <tr class="odd">
 <td style="text-align: left;">total</td>
-<td style="text-align: left;">420</td>
+<td style="text-align: left;">417</td>
 <td style="text-align: left;">402</td>
-<td style="text-align: left;">18</td>
+<td style="text-align: left;">15</td>
 </tr>
 </tbody>
 </table>
@@ -367,117 +389,117 @@ of hotelbaseline 1.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Fold01</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">16</td>
-<td style="text-align: left;">-3</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold02</td>
+<td style="text-align: left;">23</td>
+<td style="text-align: left;">27</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold03</td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">-2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold04</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">20</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold05</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold06</td>
 <td style="text-align: left;">20</td>
 <td style="text-align: left;">16</td>
 <td style="text-align: left;">-4</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Fold03</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">25</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Fold04</td>
-<td style="text-align: left;">23</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Fold05</td>
-<td style="text-align: left;">25</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Fold06</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">-2</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Fold07</td>
-<td style="text-align: left;">23</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-2</td>
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">-12</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold08</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-4</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold09</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-4</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">-3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold10</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: left;">25</td>
+<td style="text-align: left;">23</td>
+<td style="text-align: left;">-2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold11</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">-1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold12</td>
 <td style="text-align: left;">20</td>
-<td style="text-align: left;">28</td>
-<td style="text-align: left;">8</td>
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">-3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold13</td>
 <td style="text-align: left;">23</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">-3</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">-7</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold14</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-6</td>
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold15</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-2</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold16</td>
+<td style="text-align: left;">20</td>
 <td style="text-align: left;">23</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">-10</td>
+<td style="text-align: left;">3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold17</td>
-<td style="text-align: left;">15</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">-2</td>
+<td style="text-align: left;">26</td>
+<td style="text-align: left;">28</td>
+<td style="text-align: left;">2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold18</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">8</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">20</td>
+<td style="text-align: left;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fold19</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-1</td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fold20</td>
@@ -487,9 +509,9 @@ of hotelbaseline 1.
 </tr>
 <tr class="odd">
 <td style="text-align: left;">total</td>
-<td style="text-align: left;">420</td>
+<td style="text-align: left;">417</td>
 <td style="text-align: left;">402</td>
-<td style="text-align: left;">18</td>
+<td style="text-align: left;">15</td>
 </tr>
 </tbody>
 </table>

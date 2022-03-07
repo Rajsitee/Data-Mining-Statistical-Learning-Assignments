@@ -1,6 +1,7 @@
 ---
 title: "ECO395 HW 2: Rajsitee Dhavale and Arpan Chatterji"
 output: md_document
+
 ---
 ```{r, warning=FALSE, error=FALSE, include=TRUE}
 knitr::opts_chunk$set(echo=F)
@@ -163,7 +164,7 @@ rownames(cv_grid_final) = c("KNN Model")
 cv_grid_final = rbind(cv_grid_final, data.frame(k="NA", err = mean(errs), std_err = sd(errs)/sqrt(K_folds),  row.names = c("Linear Model"))) %>% dplyr::select(-std_err)
 colnames(cv_grid_final) = c("k", "rMSE")
 
-view(cv_grid_final)
+kable(cv_grid_final)
 
 ```
 ### Summary 
