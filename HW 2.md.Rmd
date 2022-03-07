@@ -4,7 +4,7 @@ output: md_document
 
 ---
 ```{r, warning=FALSE, error=FALSE, include=TRUE}
-knitr::opts_chunk$set(echo=F)
+knitr::opts_chunk$set(echo=F, message=FALSE, warning = FALSE)
 # Imported libraries
 library(tidyverse)
 library(rsample)
